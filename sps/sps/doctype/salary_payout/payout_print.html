@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+{% set val= doc.print_format() %}
+{%- if doc.pay_slip_status == 'Paid' and val -%}
+<head>
+    <style>
+        .table_padding td {
+            padding: 3px !important;
+        }
+    </style>
+    <div>
+        {% if doc.customer %}
+            <h4 align="center">{{doc.customer.title()}} Payout</h4>
+        {% else %}
+            <h4 align="center">Employee Payout</h4>
+        {%- endif -%}
+
+    <p align="right">Date : <small><b>{{ frappe.utils.formatdate(doc.payout_date, 'dd-MM-YYYY') }}</b></small></p><hr>
+    </div>
+    <p>To,<br>Branch Manager,<br>{{doc.bank}} {% if doc.bank_branch %}, {{doc.bank_branch}} {%- endif -%}</p>
+    <table class="table_padding" border="1" width="100%">
+        <tbody>
+            <tr>
+                <td colspan="2" width="100%" align="left">Please Debit Current Account: <b>________________________________</b> and Credit the A/C of the following Employee of our Company <b>{{ doc.company }}</b></td>
+            </tr>
+            <tr>
+                <td style= "width:60%;"><b>Period :</b>&emsp;&emsp;{{doc.period}}</td>
+                <td style= "width:40%;"><b>Mobile :</b> 9322879791</td>
+            </tr>
+            <tr>
+                <td style= "width:60%;"><b>From</b> &emsp;&emsp; {{frappe.utils.formatdate(doc.from_date)}} &emsp;&emsp;<b>To </b>&emsp;&emsp;{{frappe.utils.formatdate(doc.to_date)}}</td>
+                <td style= "width:40%;"><b>Batch Number :</b> {{doc.name}}</td>
+            </tr>
+            <tr>
+                <td style= "width:60%;"><b>Cheque No. __________________ Date. __________________</b></td>
+                <td style= "width:40%;"><b>Status :</b> {{doc.pay_slip_status}}</td>
+            </tr>
+            {% if doc.remark %}
+            <tr>
+                <td colspan="2" style= "width:50%;"><b>Remarks :</b> {{doc.remark.upper()}}</td>
+            </tr>
+            {%- endif -%}
+        </tbody>
+    </table></head><br>
+</head>
+    <body>
+        <table border="1" width= 100% >
+            <tr>
+                <td style= "width:4%;text-align: center;"><b>Sr.#</b></td>
+                    <td style= "width:13%;text-align: center;"><b>EMP ID</b></td>
+                <td style= "width:46%;text-align: center;"><b>Name</b></td>
+                <td style= "width:15%;text-align: center;"><b>Net Pay</b></td>
+                <td style= "width:22%;text-align: center;"><b>Account No.</b></td>
+            </tr>
+            {% for i in range(0, val|length) %}
+            <tr>
+                <td style= "width:4%;text-align: center;"><b>{{i + 1}} </b></td>
+                    <td style= "width:13%;text-align: center;"><b></b>{{val[i]["emp_id"]}}</td>
+                <td style= "width:46%;text-align: left;"><b></b>{{val[i]["emp_name"]}}</td>
+                <td style= "width:15%;text-align: right;"><b></b>{{frappe.utils.fmt_money(val[i]["net_pay"], precision = 2, currency= "INR")}}</td>
+                <td style= "width:22%;text-align: center;"><b></b>{{val[i]["bank_ac_no"]}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+{%- endif -%}
+</html>

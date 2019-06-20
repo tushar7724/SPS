@@ -1,0 +1,191 @@
+<meta name="pdfkit-orientation" content="Landscape"/>
+{%- if doc.period -%}
+	{% set val= doc.get_period_date_days() %}
+	{% set contracts= doc.get_contracts() %}
+
+	{%- if contracts -%}
+
+		{% for k,v in contracts.items() %}
+			<br>
+			<h3 style= "text-align:center;">{{ doc.company }}</h3>
+        	<h6 style= "text-align:center;">Attendance Sheet For The Month of <b>{{doc.period}}</b></h6>
+			<h5 style= "text-align:right;"><b>Date & Time : ______________________ </b></h5>
+			<table border="1" width="100%">
+				<tr>
+					<td width="8%"><b>Contract :</b></td>
+					<td width="25%">{{ v[0]['contract_name'] }}</td>
+					<td width="9%"><b>Party Name :</b></td>
+					<td width="25%">{{ v[0]['party_name'] }}</td>
+					<td width="8%"><b>Site Name:</b></td>
+					<td width="25%">{{ v[0]['bu_site_name'] }}</td>
+				</tr>
+				<tr>
+					<td width="30%"colspan="2"><b>PREPARED BY : </b></td>
+					<td width="30%" colspan="2"><b>TNO :</b></td>
+					<td width="40%" colspan="2"><b>DESIGNATION :</b></td>
+				</tr>
+			</table><br>
+			<table border="1" width="100%">
+				<thead class= "report-header">
+					<tr>
+						<td width= "1%"><b>SR# </b></td>
+						<td width= "4%"><b>TICKET.NO </b></td>
+						<td width= "19%"><b>NAME.OF.EMPLOYEE/GUARD </b></td>
+						<td width= "9%"><b>DESIGNATION</b></td>
+						{%- if val -%}
+							{% for i in range(0, val|length) %}
+								<td width= "1%"><b>{{val[i]}}</b></td>
+								{% endfor %}
+						{%- endif -%}
+						<td width= "7%"><b>PD (A)</b></td>
+						<td width= "7%"><b>WO (B)</b></td>
+						<td width= "7%"><b>TOTAL (A+B=C)</b></td>
+						<td width= "5%"><b>ED (D)</b></td>
+						<td width= "5%"><b>NH (E)</b></td>
+						<td width= "5%"><b>TOTAL (C+D+E)</b></td>
+					</tr>
+				</thead>
+				</tbody>
+					{% for j in range(0, v|length) %}
+						{%- if v[j].employee or v[j].employee != "" -%}
+							<tr>
+								<td width= "2%">{{ j+1 }}</td>
+								<td width= "7%"><b>{{ v[j].employee }}</b></td>
+								<td width= "15%">{{ v[j].employee_name}}<br><small> {{frappe.utils.formatdate(v[j].from_date, 'dd-MM-YYYY')}} To {{frappe.utils.formatdate(v[j].to_date, 'dd-MM-YYYY')}} </small></td>
+								<td width= "8%">{{ v[j].work_type }}</td>
+								{%- if val -%}
+									{% for i in range(0, val|length) %}
+										<td width= "1%"></td>
+										{% endfor %}
+								{%- endif -%}
+								<td width= "7%"></td>
+								<td width= "7%"></td>
+								<td width= "7%"></td>
+								<td width= "5%"></td>
+								<td width= "5%"></td>
+								<td width= "5%"></td>
+							</tr>
+						{%- endif -%}
+						{% if loop.index % 4 == 0 and loop.index != v|length %}
+							</tbody>
+							</table>
+							<h6 style= "text-align:center;">NOTE: P-PRESENT, A-ABSENT,O-WEEKLY OFF D-EXTRA DUTY (A,O,D TO BE SHOWN IN RED) (N/H- NATION HOLIDAY)</h6>
+							<div>
+								<table width="100%" border="1">
+									<tr>
+										<td width= "15%"><b>Present <br>Day(A):</b></br></td>
+										<td width= "20%"><b>Extra <br>Duty(B):</b></td>
+										<td width= "16%"><b>TOTAL <br>DUTY(A+B):</b></td>
+										<td width= "12%"><b><br>NH:</b></td>
+										<td width= "36%" rowspan="2">
+											<h5 style= "text-align:center;">CERTIFIED BY/APPROVED BY CLIENT<br><small>Name, Sign & Mobile</small></h5>
+											<br><br>
+									</tr>
+									<tr>
+										<td><b>W/OFF:</b></td>
+										<td><b>TOTAL DUTY <br>INCLUDING WOFF:</b></td>
+										<td colspan="2"><b>CONTRACT <br>DUTIES(A+B):</b></td>
+									</tr>
+								</table><br>
+								<table width="100%" border="0">
+									<tr>
+										<td width="50%" style= "text-align:center;">
+											<h5>Checked by AO/AM <br><small>Name & Sign</small></h5><br><br>
+										</td>
+										<td style= "text-align:center;">
+											<h5>Verified by Ops Manager<br><small>Name & Sign</small></h5><br><br>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<!--<div id="footer-html" class="visible-pdf">
+								<p class="text-center small page-number visible-pdf">
+									{{ _("Page {0} of {1}").format('<span class="page"></span>', '<span class="topage"></span>') }}
+								</p>
+							</div>-->
+							<div class="page-break"></div>
+							<br>
+							<h3 style= "text-align:center;">{{ doc.company }}</h3>
+        					<h6 style= "text-align:center;">Attendance Sheet For The Month of <b>{{doc.period}}</b></h6>
+							<h5 style= "text-align:right;"><b>Date & Time : ______________________ </b></h5>
+							<table border="1" width="100%">
+								<tr>
+									<td width="8%"><b>Contract :</b></td>
+									<td width="25%">{{ v[0]['contract_name'] }}</td>
+									<td width="9%"><b>Party Name :</b></td>
+									<td width="25%">{{ v[0]['party_name'] }}</td>
+									<td width="8%"><b>Site Name:</b></td>
+									<td width="25%">{{ v[0]['bu_site_name'] }}</td>
+								</tr>
+								<tr>
+									<td width="30%"colspan="2"><b>PREPARED BY : </b></td>
+									<td width="30%" colspan="2"><b>TNO :</b></td>
+									<td width="40%" colspan="2"><b>DESIGNATION :</b></td>
+								</tr>
+							</table><br>
+							<table border="1" width="100%">
+								<thead class= "report-header">
+									<tr>
+										<td width= "1%"><b>SR# </b></td>
+										<td width= "4%"><b>TICKET.NO </b></td>
+										<td width= "19%"><b>NAME.OF.EMPLOYEE/GUARD </b></td>
+										<td width= "9%"><b>DESIGNATION</b></td>
+										{%- if val -%}
+											{% for i in range(0, val|length) %}
+												<td width= "1%"><b>{{val[i]}}</b></td>
+												{% endfor %}
+										{%- endif -%}
+										<td width= "7%"><b>PD (A)</b></td>
+										<td width= "7%"><b>WO (B)</b></td>
+										<td width= "7%"><b>TOTAL (A+B=C)</b></td>
+										<td width= "5%"><b>ED (D)</b></td>
+										<td width= "5%"><b>NH (E)</b></td>
+										<td width= "5%"><b>TOTAL (C+D+E)</b></td>
+									</tr>
+								</thead>
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+			<h6 style= "text-align:center;">NOTE: P-PRESENT, A-ABSENT,O-WEEKLY OFF D-EXTRA DUTY (A,O,D TO BE SHOWN IN RED) (N/H- NATION HOLIDAY)</h6>
+			<div>
+				<table width="100%" border="1">
+					<tr>
+						<td width= "15%"><b>Present <br>Day(A):</b></br></td>
+						<td width= "20%"><b>Extra <br>Duty(B):</b></td>
+						<td width= "16%"><b>TOTAL <br>DUTY(A+B):</b></td>
+						<td width= "12%"><b><br>NH:</b></td>
+						<td width= "36%" rowspan="2">
+							<h5 style= "text-align:center;">CERTIFIED BY/APPROVED BY CLIENT<br><small>Name, Sign & Mobile</small></h5>
+							<br><br>
+					</tr>
+					<tr>
+						<td><b>W/OFF:</b></td>
+						<td><b>TOTAL DUTY <br>INCLUDING WOFF:</b></td>
+						<td colspan="2"><b>CONTRACT <br>DUTIES(A+B):</b></td>
+					</tr>
+				</table><br>
+				<table width="100%" border="0">
+					<tr>
+						<td width="50%" style= "text-align:center;">
+							<h5>Checked by AO/AM <br><small>Name & Sign</small></h5><br><br>
+						</td>
+						<td style= "text-align:center;">
+							<h5>Verified by Ops Manager<br><small>Name & Sign</small></h5><br><br>
+						</td>
+					</tr>
+				</table>
+			</div>
+			{% if loop.index != contracts|length %}
+				<!--<div id="footer-html" class="visible-pdf">
+					<p class="text-center small page-number visible-pdf">
+						{{ _("Page {0} of {1}").format('<span class="page"></span>', '<span class="topage"></span>') }}
+					</p>
+				</div>-->
+				<div class="page-break"></div>
+			{%- endif -%}
+		{% endfor %}
+	{%- else -%}
+		<h2 style= "text-align:center;color:red"> Data not avalable for selected criteria.</br></h2>
+	{%- endif -%}
+{%- endif -%}
